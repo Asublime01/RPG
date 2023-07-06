@@ -23,7 +23,7 @@ Enjoy a peaceful fishing experience by casting your rod into the water. Use bait
 
 ### Shop
 
-Visit the shop to purchase useful items with your hard-earned coins. The shop offers health potions for restoration during battles.
+Visit the shop to purchase useful items with your hard-earned coins. The shop currently offers health potions for restoration during battles.
 
 ### Leveling Up
 
