@@ -3,8 +3,13 @@ class HealthPotion:
         self.item_name = item_name
         self.item_amount = item_amount
         
-    item_name = "Health Potion"
-    item_amount = 25
+
+class NormalBait:
+    def __init__(self, item_name, item_amount, item_qty):
+        self.item_name = item_name
+        self.item_amount = item_amount
+        self.item_qty = item_qty
+    
 
 
         

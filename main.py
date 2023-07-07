@@ -1,6 +1,9 @@
 from random import randint, choice
 import time
-from shopItems import HealthPotion as hp
+from shopItems import *
+
+health_potion = HealthPotion("Health Potion", 25)
+normal_bait = NormalBait("Normal Bait", 50, 10)
 
 
 
@@ -13,6 +16,27 @@ exp = 0
 monsters_killed = 0
 bait = 6
 fish_caught = 0
+
+
+welcome_banner = f"""
+
+        Welcome to Just An Average RPG!
+
+           Controls
+        --------------
+        Type: 'fight' to attack different mobs
+
+        Type: 'fish' (for obvious reasons)
+
+        Type: 'bag', 'inv', or 'inventory' to view your health, wallet and LVL info
+
+        Type: 'Shop' (also for obvious reasons)
+
+        GOOD LUCK AND DON'T DIE!
+
+
+
+\n"""
 
 class Fish:
     def __init__(self, name, sell_value, rarity):
@@ -101,15 +125,16 @@ def evil_mage(player_health, wallet, exp, monsters_killed):
     return player_health, wallet, exp, monsters_killed
 
 
-def shop(wallet, player_health):
+def shop(wallet, player_health, bait):
     print(f"""
 ╔═══════════════════════════════════════════╗
 ║               SHOP / INFIRMARY             ║
 ╟─────────────────────────────────────────────╢
-║              ITEM    |    PRICE             ║
+║              ITEM    |    PRICE     |  QTY  ║
 ╟─────────────────────────────────────────────╢
-║  [1]  Health Potion  │  25 Coins            ║
+║  [1]  Health Potion  |  25 Coins    |   1   ║
 ║                                             ║
+║  [2]  Normal Bait    |  50 Coins    |  10   ║
 ║                                             ║
 ║  [0] Exit                                  ║
 ╚═══════════════════════════════════════════╝
@@ -117,26 +142,34 @@ def shop(wallet, player_health):
                                 """)
     while True:
         try:
-            purchase_choice = input(f"Enter # to purchase or exit| Wallet Balance: {wallet} /> ")
+            purchase_choice = int(input(f"Enter # to purchase or exit| Wallet Balance: {wallet} /> "))
             if purchase_choice == "":
                 print("Please enter a valid option.")
                 continue
-            purchase_choice = int(purchase_choice)
-
-            if purchase_choice == 0:
+            elif purchase_choice == 0:
                 print("Leaving the shop...")
                 break
             elif purchase_choice == 1:
-                if wallet - hp.item_amount < 0:
+                if wallet - health_potion.item_amount < 0:
                     print("You can't afford this item.")
                     continue
-                elif wallet - hp.item_amount >= 0:
+                elif wallet - health_potion.item_amount >= 0:
                     print("You bought a Health Potion!")
-                    wallet -= hp.item_amount
+                    wallet -= health_potion.item_amount
                     input("Press 'enter' drink your potion.")
                     print("Your health has been restored!")
                     player_health = player_default_health
                     continue
+            elif purchase_choice == 2:
+                if wallet - normal_bait.item_amount < 0:
+                    print("You can't afford this item.")
+                    continue
+                elif wallet - normal_bait.item_amount >= 0:
+                    print("You bought 10 Normal Bait!")
+                    wallet -= normal_bait.item_amount
+                    print("Your fishing supplies have been added to your tackle box.")
+                    bait += normal_bait.item_qty
+                    continue 
             else:
                 print(f"{purchase_choice}, is invalid.")
                 continue
@@ -144,7 +177,7 @@ def shop(wallet, player_health):
             print("Please enter a valid option.")
             continue
 
-    return wallet, player_health
+    return wallet, player_health, bait
                 
 
 class Fish:
@@ -207,7 +240,7 @@ def fish(bait, wallet, exp, fish_caught):
                 fish_caught += 1
                 
                 
-
+print(welcome_banner)
 
 
 while run and player_health > 0:
@@ -257,7 +290,7 @@ while run and player_health > 0:
     elif user_choice == "shop":
         print("Entering the shop...")
         time.sleep(1.5)
-        wallet, player_health = shop(wallet, player_health)
+        wallet, player_health, bait = shop(wallet, player_health, bait)
     elif user_choice == "fish":
         print("Traveling to the Lake...")
         time.sleep(1.5)
