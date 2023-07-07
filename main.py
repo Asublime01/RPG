@@ -154,7 +154,7 @@ class Fish:
         self.exp = exp
 
 def fish(bait, wallet, exp, fish_caught):
-    print("Press 'enter' to cast your rod, type 'exit' to go back home")
+    print("Type 'cast' to cast your line, type 'exit' to go back home")
     fish_list = [
         Fish("Finara", 5, 10),
         Fish("Aquilia", 8, 16),
@@ -172,6 +172,11 @@ def fish(bait, wallet, exp, fish_caught):
         fishing_input = input(f"\nBait: {bait} Wallet: {wallet} Coins > ")
         if fishing_input.lower() == "exit":
             return bait, wallet, exp, fish_caught
+        elif fishing_input.lower() == "cast":
+            pass
+        else:
+            print("Please type one of the 2 options.")
+            continue
         
         if bait <= 0:
             print("You don't have any bait.")
