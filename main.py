@@ -76,18 +76,18 @@ def bandit(player_health, wallet, exp, monsters_killed):
     bandit_xp = randint(25, 34)
     while bandit_health > 0:
         player_dmg = randint(6, 18)
-        print(f"You stab the bandit for {player_dmg} DMG!\n")
+        print(f"You stab the Bandit for {player_dmg} DMG!\n")
         bandit_health -= player_dmg
         time.sleep(1.2)
         bandit_dmg = randint(5, 13)
-        print(f"The bandit shoots you with his slingshot for {bandit_dmg} DMG.\n")
+        print(f"The Bandit shoots you with his slingshot for {bandit_dmg} DMG.\n")
         player_health -= bandit_dmg
         time.sleep(1.2)
     
     if player_health <= 0:
         return player_health, wallet, exp, monsters_killed
 
-    print("You defeated the bandit!")
+    print("You defeated the Bandit!")
     monsters_killed += 1
     exp += bandit_xp
     bandit_chance = randint(1, 20)
@@ -105,11 +105,11 @@ def evil_mage(player_health, wallet, exp, monsters_killed):
     mage_xp = randint(35, 50)
     while mage_health > 0:
         player_dmg = randint(6, 18)
-        print(f"You strike the mage with your dagger for {player_dmg} DMG!\n")
+        print(f"You strike the Evil Mage with your dagger for {player_dmg} DMG!\n")
         mage_health -= player_dmg
         time.sleep(1.2)
         mage_dmg = randint(3, 12)
-        print(f"The mage casts a spell on you for {mage_dmg} DMG!\n")
+        print(f"The Evil Mage casts a spell on you for {mage_dmg} DMG!\n")
         player_health -= mage_dmg
         time.sleep(1.2)
 
@@ -124,6 +124,45 @@ def evil_mage(player_health, wallet, exp, monsters_killed):
     wallet += coins
     return player_health, wallet, exp, monsters_killed
 
+
+def hexed_bandit(player_health, wallet, exp, monsters_killed):
+    hexed_bandit_hp = 40
+    hexed_bandit_xp = (34, 50)
+    while hexed_bandit_hp > 0:
+        player_dmg = randint(6, 18)
+        print(f"You shoot the Hexed Bandit with an arrow for {player_dmg} DMG!\n")
+        hexed_bandit_hp -= player_dmg
+        time.sleep(1.2)
+        hexed_bandit_dmg = randint(10, 15)
+        print(f"The Hexed Bandit stabs you with his enchanted dagger for {hexed_bandit_dmg} DMG!\n")
+        player_health -= hexed_bandit_dmg
+        time.sleep(1.2)
+
+    if player_health <= 0:
+        return player_health, wallet, exp, monsters_killed
+    
+    print("You sliced the Hexed Bandit to pieces!")
+    monsters_killed += 1
+    exp += hexed_bandit_xp
+    coins = randint(16, 32)
+    hexed_bandit_chance = randint(1, 30)
+    if hexed_bandit_chance == 30:
+        print("WOW! The Hexed Bandit had a HUGE stash! +50 Coins")
+        wallet += 50
+    else:
+        print("You picked up {coins} Coins.")
+    return player_health, wallet, exp, monsters_killed
+
+def hexed_mage(player_health, wallet, exp, monsters_killed):
+    hexed_mage_hp = 45
+    hexed_mage_xp = randint(50, 80)
+    while hexed_mage_hp > 0:
+        player_dmg = randint(6, 18)
+        print(f"You cut the Hexed Mage with your sword for {player_dmg} DMG!\n")
+        hexed_mage_hp -= player_dmg
+        time.sleep(1.2)
+        hexed_mage_dmg = randint(8, 15)
+        print(f"The Hexed Mage hits you with a beam of energy for {hexed_mage_dmg} DMG!\n")
 
 def shop(wallet, player_health, bait):
     print(f"""
@@ -246,39 +285,77 @@ print(welcome_banner)
 while run and player_health > 0:
     user_choice = input(f"({current_lvl})> ").lower()
     if user_choice == "fight":
-        spawn_chance = randint(1, 3)
-        if spawn_chance == 1:
-            print("You find yourself toe to toe with a SLIME!!!")
-            player_health, wallet, exp, monsters_killed = slime(player_health, wallet, exp, monsters_killed)
+        if current_lvl == 1:
+            spawn_chance = randint(1, 3)
+            if spawn_chance == 1:
+                print("You find yourself toe to toe with a SLIME!!!")
+                player_health, wallet, exp, monsters_killed = slime(player_health, wallet, exp, monsters_killed)
 
-            if exp >= 150:
-                current_lvl += 1
-                exp = 0
-                print(f"Congrats Player! You are Level {current_lvl}!")
-                continue
+                if exp >= 150:
+                    current_lvl += 1
+                    exp = 0
+                    print(f"Congrats Player! You are Level {current_lvl}!")
+                    continue
+
+            elif spawn_chance == 2:
+                print("You found a BANDIT lurking in the bushes!!!")
+                player_health, wallet, exp, monsters_killed = bandit(player_health, wallet, exp, monsters_killed)
+
+                if exp >= 150:
+                    current_lvl += 1
+                    exp = 0
+                    print(f"Congrats Player! You are Level {current_lvl}!")
+                    continue
+
+            elif spawn_chance == 3:
+                print("You are cornered by an Evil Mage!")
+                player_health, wallet, exp, monsters_killed = evil_mage(player_health, wallet, exp, monsters_killed)
+
+                if exp >= 150:
+                    current_lvl += 1
+                    exp = 0
+                    print(f"Congrats Player! You are Level {current_lvl}!")
+                    continue
+
+            else:
+                print("Error")
+        elif current_lvl == 2:
+            spawn_chance == randint(1, 6)
+            if spawn_chance == 1:
+                print("You find yourself toe to toe with a SLIME!!!")
+                player_health, wallet, exp, monsters_killed = slime(player_health, wallet, exp, monsters_killed)
+                print("Uh Oh.....")
+                time.sleep(.7)
+                print("The Slime summoned it's friend upon death!")
+                player_health, wallet, exp, monsters_killed = slime(player_health, wallet, exp, monsters_killed)
+                print("Hooray you killed both of them! Here's an extra 25 EXP.")
+                exp += 25
+
+                if exp >= 300:
+                    current_lvl += 1
+                    exp = 0
+                    print(f"Congrats Player! You are Level {current_lvl}!")
+                    continue
+            elif spawn_chance == 2:
+                print("You cross paths with a HEXED BANDIT!!!")
+                player_health, wallet, exp, monsters_killed = hexed_bandit(player_health, wallet, exp, monsters_killed)
+
+                if exp >= 300:
+                    current_lvl += 1
+                    exp = 0
+                    print(f"Congrats Player! You are Level {current_lvl}!")
+                    continue
+
+            elif spawn_chance == 3:
+                print("A Hexed Mage falls out of the sky!!!")
+                player_health, wallet, exp, monsters_killed = hexed_mage(player_health, wallet, exp, monsters_killed)
                 
-        elif spawn_chance == 2:
-            print("You found a BANDIT lurking in the bushes!!!")
-            player_health, wallet, exp, monsters_killed = bandit(player_health, wallet, exp, monsters_killed)
-
-            if exp >= 150:
-                current_lvl += 1
-                exp = 0
-                print(f"Congrats Player! You are Level {current_lvl}!")
-                continue
-
-        elif spawn_chance == 3:
-            print("You are cornered by an Evil Mage!")
-            player_health, wallet, exp, monsters_killed = evil_mage(player_health, wallet, exp, monsters_killed)
-
-            if exp >= 150:
-                current_lvl += 1
-                exp = 0
-                print(f"Congrats Player! You are Level {current_lvl}!")
-                continue
-
-        else:
-            print("Error")
+            elif spawn_chance == 4:
+                pass
+            elif spawn_chance == 5:
+                pass
+            elif spawn_chance == 6:
+                pass
     elif user_choice == "inv" or user_choice == "inventory" or user_choice == "bag":
         print(f"""
               
